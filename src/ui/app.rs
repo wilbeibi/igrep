@@ -388,6 +388,14 @@ impl Application for App {
         self.ig.search(&mut self.result_list);
     }
 
+    fn on_move_highlight_up(&mut self) {
+        self.result_list_state.select_up();
+    }
+
+    fn on_move_highlight_down(&mut self) {
+        self.result_list_state.select_down();
+    }
+
     fn on_exit(&mut self) {
         self.ig.exit();
     }
@@ -409,4 +417,6 @@ pub trait Application {
     fn on_open_file(&mut self);
     fn on_search(&mut self);
     fn on_exit(&mut self);
+    fn on_move_highlight_up(&mut self);
+    fn on_move_highlight_down(&mut self);
 }

@@ -65,6 +65,7 @@ impl ContextViewerState {
 pub struct ContextViewer {
     file_path: PathBuf,
     file_highlighted: Vec<Vec<(highlighting::Style, String)>>,
+    highlighted_line_index: usize,
 }
 
 impl ContextViewer {
@@ -126,8 +127,8 @@ impl ContextViewer {
             .map(Spans::from)
             .collect_vec();
 
-        let match_offset = match_index - max(first_line_index, 1);
-        let styled_line = &mut styled_spans[match_offset];
+        let highlight_offset = self.highlighted_line_index - max(first_line_index, 1);
+        let styled_line = &mut styled_spans[highlight_offset];
         let line_width = styled_line.width();
         let span_vec = &mut styled_line.0;
 
@@ -141,6 +142,18 @@ impl ContextViewer {
         }
 
         styled_spans
+    }
+
+    pub fn move_highlight_up(&mut self) {
+        if self.highlighted_line_index > 0 {
+            self.highlighted_line_index -= 1;
+        }
+    }
+
+    pub fn move_highlight_down(&mut self) {
+        if self.highlighted_line_index < self.file_highlighted.len() - 1 {
+            self.highlighted_line_index += 1;
+        }
     }
 }
 

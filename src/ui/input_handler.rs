@@ -87,8 +87,8 @@ impl InputHandler {
         self.input_buffer.clear();
 
         match key_code {
-            KeyCode::Down => app.on_next_match(),
-            KeyCode::Up => app.on_previous_match(),
+            KeyCode::Down => app.on_move_highlight_down(),
+            KeyCode::Up => app.on_move_highlight_up(),
             KeyCode::Right | KeyCode::PageDown => app.on_next_file(),
             KeyCode::Left | KeyCode::PageUp => app.on_previous_file(),
             KeyCode::Home => app.on_top(),
@@ -255,5 +255,19 @@ mod tests {
         let mut app_mock = MockApplication::default();
         app_mock.expect_on_exit().once().return_const(());
         handle_key_series(key_codes, &mut app_mock);
+    }
+
+    #[test_case(KeyCode::Up; "up")]
+    fn move_highlight_up(key_code: KeyCode) {
+        let mut app_mock = MockApplication::default();
+        app_mock.expect_move_highlight_up().once().return_const(());
+        handle_key(key_code, &mut app_mock);
+    }
+
+    #[test_case(KeyCode::Down; "down")]
+    fn move_highlight_down(key_code: KeyCode) {
+        let mut app_mock = MockApplication::default();
+        app_mock.expect_move_highlight_down().once().return_const(());
+        handle_key(key_code, &mut app_mock);
     }
 }
